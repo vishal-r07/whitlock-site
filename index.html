@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whitlock WebWorks — Premium Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,900;1,300;1,700;1,900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+
+:root {
+  --w: #F4F0E8;
+  --b: #0A0A0A;
+  --red: #E8173A;
+  --blue: #0044FF;
+  --lime: #AAFF00;
+  --tan: #E8E0D0;
+  --ff-disp: 'Bebas Neue', sans-serif;
+  --ff-cond: 'Barlow Condensed', sans-serif;
+  --ff-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { overflow-x: hidden; scroll-behavior: smooth; }
+
+body {
+  background: var(--w);
+  color: var(--b);
+  font-family: var(--ff-cond);
+  font-size: 16px;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ── */
+#csr { position: fixed; width: 24px; height: 24px; pointer-events: none; z-index: 9999; transform: translate(-1px,-1px); transition: transform .2s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' shape-rendering='crispEdges'%3E%3Cpath d='M2,2 L2,18 L6,14 L9,21 L11,20 L8,13 L14,13 Z' fill='%23E8173A' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; }
+#csr-t { display: none; }
+.hov #csr { transform: translate(-1px,-1px) scale(1.3); }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 48px;
+  mix-blend-mode: multiply;
+}
+.nav-center-logo {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px;
+}
+.nav-logo-sub {
+  font-family: var(--ff-mono); font-size: 9px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(10,10,10,.45);
+  border-left: 1px solid rgba(10,10,10,.2);
+  padding-left: 10px;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  background: var(--b);
+  color: var(--w);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 0 64px;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--ff-disp);
+  font-size: clamp(180px, 30vw, 360px);
+  color: rgba(255,255,255,.015);
+  white-space: nowrap;
+  pointer-events: none; user-select: none;
+  letter-spacing: -4px;
+}
+
+.hero-lines { position: absolute; inset: 0; pointer-events: none; }
+.hero-lines::before {
+  content: '';
+  position: absolute; left: 48px; top: 0; bottom: 0;
+  width: 1px; background: rgba(255,255,255,.08);
+}
+.hero-lines::after {
+  content: '';
+  position: absolute; right: 48px; top: 0; bottom: 0;
+  width: 1px; background: rgba(255,255,255,.08);
+}
+
+.hero-pill {
+  position: absolute; top: 140px; right: 48px;
+  background: var(--red); color: var(--w);
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 10px 20px;
+  animation: pillPulse 3s ease-in-out infinite;
+}
+@keyframes pillPulse { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+.hero-eye-row {
+  padding: 0 48px; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 20px;
+}
+.hero-eye {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgba(244,240,232,.45);
+  display: flex; align-items: center; gap: 10px;
+}
+.hero-eye::before { content: ''; width: 24px; height: 1px; background: var(--red); }
+
+.hero-h1 {
+  font-family: var(--ff-disp);
+  font-size: clamp(80px, 14vw, 200px);
+  line-height: .88; letter-spacing: -1px;
+  padding: 0 48px;
+  display: flex; flex-wrap: wrap; gap: 0 0.25em;
+}
+.hero-h1 .block { display: inline-block; will-change: transform, opacity; }
+.hero-h1 .red { color: var(--red); }
+.hero-h1 .outline {
+  position: relative;
+  -webkit-text-stroke: 2px var(--w);
+  color: transparent;
+  letter-spacing: -3px;
+  text-transform: uppercase;
+}
+.hero-h1 .outline::after {
+  content: "SOMETHING";
+  position: absolute;
+  top: 0; left: 0;
+  width: var(--fill-width, 0%);
+  height: 100%;
+  color: var(--w);
+  -webkit-text-stroke: 0px transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: none;
+}
+
+.hero-bottom {
+  padding: 48px 48px 0;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-top: 1px solid rgba(255,255,255,.1);
+  margin: 40px 48px 0;
+}
+.hero-desc {
+  font-family: var(--ff-cond); font-weight: 300; font-size: 17px;
+  line-height: 1.6; color: rgba(244,240,232,.6); max-width: 400px;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-cta {
+  font-family: var(--ff-mono); font-size: 11px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--w); text-decoration: none;
+  display: flex; align-items: center; gap: 12px;
+  border: 1px solid rgba(255,255,255,.2);
+  padding: 16px 28px;
+  transition: all .3s; white-space: nowrap;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-cta:hover { background: var(--red); border-color: var(--red); gap: 20px; }
+
+/* ── TICKER ── */
+.ticker {
+  background: var(--red); overflow: hidden;
+  padding: 14px 0; white-space: nowrap;
+}
+.ticker-track {
+  display: inline-flex; gap: 0;
+  animation: tick 18s linear infinite;
+}
+.ticker-item {
+  font-family: var(--ff-disp); font-size: 22px; letter-spacing: 2px;
+  color: var(--w); padding: 0 48px;
+  display: flex; align-items: center; gap: 48px;
+}
+.ticker-dot { width: 6px; height: 6px; background: rgba(255,255,255,.5); border-radius: 50%; }
+@keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── TILT PANEL ── */
+.tilt-section {
+  padding: 160px 48px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  position: relative; overflow: hidden;
+}
+.tilt-section::before {
+  content: '02';
+  position: absolute; right: -20px; top: 40px;
+  font-family: var(--ff-disp); font-size: 280px;
+  color: rgba(0,0,0,.04); line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.tilt-left { position: relative; }
+.tilt-num {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--red);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+}
+.tilt-num::before { content: ''; width: 30px; height: 1px; background: var(--red); }
+.tilt-h2 {
+  font-family: var(--ff-disp);
+  font-size: clamp(64px, 8vw, 120px);
+  line-height: .9; letter-spacing: -1px;
+  margin-bottom: 32px;
+}
+.tilt-h2 em { color: var(--blue); font-style: normal; }
+.tilt-p { font-size: 17px; font-weight: 300; line-height: 1.75; color: rgba(10,10,10,.65); }
+
+.tilt-right { display: flex; flex-direction: column; gap: 2px; }
+.info-block {
+  background: var(--tan); padding: 36px 40px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background .3s, transform .3s;
+  cursor: none;
+}
+.info-block:hover { background: var(--lime); transform: translateX(8px); }
+.info-block:nth-child(2):hover { background: var(--blue); color: var(--w); }
+.info-block:nth-child(2):hover .info-val { color: var(--w); }
+.info-n { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; opacity: .5; }
+.info-val { font-family: var(--ff-cond); font-weight: 700; font-size: 22px; letter-spacing: -.3px; }
+
+/* ── SERVICES BAND ── */
+.services-band { background: var(--b); color: var(--w); padding: 100px 0; overflow: hidden; }
+.sb-head { padding: 0 48px; margin-bottom: 64px; }
+.sb-eyebrow {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--red); margin-bottom: 16px;
+}
+.sb-h2 {
+  font-family: var(--ff-disp); font-size: clamp(52px, 7vw, 100px);
+  line-height: .9; letter-spacing: -.5px;
+}
+.sb-h2 .out { -webkit-text-stroke: 1.5px rgba(244,240,232,.3); color: transparent; }
+
+.svc-row {
+  display: grid; grid-template-columns: 80px 1fr 200px 80px;
+  align-items: center;
+  padding: 28px 48px; border-top: 1px solid rgba(255,255,255,.08);
+  transition: all .4s cubic-bezier(.22,1,.36,1);
+  cursor: none; position: relative;
+}
+.svc-row:last-child { border-bottom: 1px solid rgba(255,255,255,.08); }
+.svc-row::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0; background: var(--red);
+  transition: width .4s cubic-bezier(.22,1,.36,1);
+}
+.svc-row:nth-child(2)::before { background: var(--blue); }
+.svc-row:nth-child(3)::before { background: var(--lime); }
+.svc-row:nth-child(4)::before { background: var(--red); }
+.svc-row:hover::before { width: 4px; }
+.svc-row:hover { padding-left: 60px; background: rgba(255,255,255,.03); }
+.svc-i { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,.3); }
+.svc-name { font-family: var(--ff-disp); font-size: clamp(36px, 4vw, 64px); letter-spacing: -.5px; transition: color .3s; }
+.svc-row:hover .svc-name { color: var(--red); }
+.svc-row:nth-child(2):hover .svc-name { color: var(--blue); }
+.svc-row:nth-child(3):hover .svc-name { color: var(--lime); }
+.svc-tag {
+  font-family: var(--ff-mono); font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,.3); text-align: right;
+}
+.svc-arr { font-size: 22px; color: rgba(255,255,255,.2); text-align: right; transition: transform .3s, color .3s; }
+.svc-row:hover .svc-arr { transform: translateX(6px) rotate(-15deg); color: var(--w); }
+
+/* ── FORM SECTION ── */
+.form-section {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; min-height: 60vh;
+  background: var(--blue); color: var(--w);
+  position: relative; overflow: hidden;
+  padding: 100px 48px;
+}
+.fl-top { position: relative; z-index: 2; max-width: 600px; }
+.fl-eye {
+  font-family: var(--ff-mono); font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,.5);
+  margin-bottom: 24px;
+}
+.fl-h2 {
+  font-family: var(--ff-disp);
+  font-size: clamp(60px, 8vw, 110px);
+  line-height: .9; letter-spacing: -.5px;
+  margin-bottom: 32px;
+}
+.fl-p { font-size: 17px; font-weight: 300; line-height: 1.75; color: rgba(255,255,255,.8); margin-bottom: 40px; }
+
+.submit-btn {
+  display: inline-flex;  background: var(--b); color: var(--w);
+  border: none; padding: 22px 40px;
+  font-family: var(--ff-disp); font-size: 26px; letter-spacing: 1px;
+  cursor: none; transition: all .35s cubic-bezier(.22,1,.36,1);
+  align-items: center; gap: 30px; text-decoration: none;
+  position: relative; z-index: 2;
+}
+.submit-btn:hover { background: var(--red); transform: translateY(-3px); }
+.submit-btn .arr { font-size: 22px; transition: transform .3s; }
+.submit-btn:hover .arr { transform: translateX(8px) rotate(-20deg); }
+
+/* ── PROCESS STRIP ── */
+.process-strip { background: var(--lime); padding: 100px 48px; }
+.ps-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+}
+.ps-card {
+  background: rgba(0,0,0,.06); padding: 40px 32px;
+  transition: background .3s, transform .3s;
+  cursor: none;
+}
+.ps-card:hover { background: var(--b); color: var(--lime); transform: translateY(-6px); }
+.ps-n { font-family: var(--ff-mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; opacity: .5; margin-bottom: 24px; display: block; }
+.ps-t { font-family: var(--ff-disp); font-size: 36px; letter-spacing: -.3px; margin-bottom: 12px; line-height: .95; }
+.ps-d { font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(10,10,10,.6); }
+
+/* ── FLOATING SOCIALS ── */
+.float-socials {
+  position: fixed; bottom: 28px; right: 28px;
+  display: flex; flex-direction: column; gap: 10px; z-index: 1000;
+}
+.soc-btn {
+  width: 48px; height: 48px; background: var(--b); color: var(--w);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; transition: all .3s; cursor: none;
+}
+.soc-btn:hover { background: var(--red); transform: translateY(-3px) scale(1.05); }
+.soc-btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--b); color: var(--w);
+  padding: 80px 48px 48px;
+}
+.foot-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 80px;
+}
+.foot-brand { font-family: var(--ff-disp); font-size: 72px; letter-spacing: -1px; line-height: .9; color: rgba(255,255,255,.08); }
+.foot-email { font-family: var(--ff-cond); font-size: 22px; font-weight: 300; color: rgba(255,255,255,.5); text-decoration: none; transition: color .2s; }
+.foot-email:hover { color: var(--red); }
+.foot-bottom { display: flex; justify-content: space-between; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.08); font-family: var(--ff-mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,.25); }
+
+/* ── MOBILE ── */
+@media(max-width:900px) {
+  nav { padding: 16px 24px; }
+  .hero-h1 { padding: 0 24px; }
+  .hero-eye-row { padding: 0 24px; }
+  .hero-bottom { padding: 32px 24px 0; margin: 32px 24px 0; flex-direction: column; align-items: flex-start; gap: 24px; }
+  .tilt-section { grid-template-columns: 1fr; padding: 80px 24px; gap: 40px; }
+  .svc-row { grid-template-columns: 60px 1fr 80px; padding: 24px; }
+  .svc-tag { display: none; }
+  .form-section { padding: 80px 24px; }
+  .ps-grid { grid-template-columns: 1fr 1fr; }
+  .process-strip, .services-band { padding: 80px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div id="csr"></div>
+<div id="csr-t"></div>
+
+<!-- NAV -->
+<nav>
+  <div style="width: 100px;"></div>
+  <div class="nav-center-logo">
+    <span style="font-family: var(--ff-disp); font-size: 26px; color: var(--b); letter-spacing: 1px;">WHITLOCK VENTURES</span>
+    <span class="nav-logo-sub">WebWorks</span>
+  </div>
+  <img src="whitlock_logo.png" alt="Whitlock Logo" style="height: 35px; mix-blend-mode: multiply;">
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-text">WHITLOCK</div>
+  <div class="hero-lines"></div>
+  <div class="hero-pill">✦ Open for Projects</div>
+
+  <div class="hero-eye-row">
+    <div class="hero-eye">Whitlock WebWorks · Chennai</div>
+  </div>
+
+  <h1 class="hero-h1" id="hero-h1">
+    <span class="block">LET'S</span>
+    <span class="block red">BUILD</span>
+    <span class="block outline">SOMETHING</span>
+    <span class="block">REAL.</span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-desc">Premium websites that make people stop, look twice, and reach out. We don't do ordinary. Tell us what you need — let's get started.</p>
+    <a class="hero-cta" href="start-project.html">Start Project →</a>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">PREMIUM DESIGN <span class="ticker-dot"></span> FAST DELIVERY <span class="ticker-dot"></span> MOBILE-FIRST <span class="ticker-dot"></span> AI-POWERED <span class="ticker-dot"></span> CONVERSION-FOCUSED <span class="ticker-dot"></span> WHITLOCK WEBWORKS <span class="ticker-dot"></span></div>
+    <div class="ticker-item">PREMIUM DESIGN <span class="ticker-dot"></span> FAST DELIVERY <span class="ticker-dot"></span> MOBILE-FIRST <span class="ticker-dot"></span> AI-POWERED <span class="ticker-dot"></span> CONVERSION-FOCUSED <span class="ticker-dot"></span> WHITLOCK WEBWORKS <span class="ticker-dot"></span></div>
+  </div>
+</div>
+
+<!-- TILT INFO SECTION -->
+<section class="tilt-section">
+  <div class="tilt-left">
+    <div class="tilt-num">01 / Why Whitlock</div>
+    <h2 class="tilt-h2">BUILT TO<br><em>CLOSE</em><br>DEALS.</h2>
+    <p class="tilt-p">We're not just designers — we build digital presences that work. Every site we create is engineered to make your brand look premium and get you more clients. Fast timelines, zero templates, real results.</p>
+  </div>
+  <div class="tilt-right">
+    <div class="info-block">
+      <span class="info-n">Delivery Time</span>
+      <span class="info-val">Within 15 Days</span>
+    </div>
+    <div class="info-block">
+      <span class="info-n">Response Time</span>
+      <span class="info-val">Within 1 Day</span>
+    </div>
+    <div class="info-block">
+      <span class="info-n">Revisions</span>
+      <span class="info-val">Unlimited Until Perfect</span>
+    </div>
+    <div class="info-block">
+      <span class="info-n">Starting From</span>
+      <span class="info-val">₹10,000 / $300</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES BAND -->
+<div class="services-band">
+  <div class="sb-head">
+    <div class="sb-eyebrow">What we offer</div>
+    <h2 class="sb-h2">OUR<br><span class="out">SERVICES</span></h2>
+  </div>
+  <div class="svc-list">
+    <div class="svc-row">
+      <span class="svc-i">01</span>
+      <span class="svc-name">Business Websites</span>
+      <span class="svc-tag">Custom · Premium</span>
+      <span class="svc-arr">↗</span>
+    </div>
+    <div class="svc-row">
+      <span class="svc-i">02</span>
+      <span class="svc-name">Landing Pages</span>
+      <span class="svc-tag">CRO · Fast</span>
+      <span class="svc-arr">↗</span>
+    </div>
+    <div class="svc-row">
+      <span class="svc-i">03</span>
+      <span class="svc-name">E-Commerce Stores</span>
+      <span class="svc-tag">Shopify · Custom</span>
+      <span class="svc-arr">↗</span>
+    </div>
+    <div class="svc-row">
+      <span class="svc-i">04</span>
+      <span class="svc-name">Brand Identity</span>
+      <span class="svc-tag">Logo · System</span>
+      <span class="svc-arr">↗</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS STRIP -->
+<section class="process-strip">
+  <div class="ps-grid">
+    <div class="ps-card">
+      <span class="ps-n">Step 01</span>
+      <div class="ps-t">Fill the Form</div>
+      <p class="ps-d">Tell us about your project — business type, goals, budget. Takes 2 minutes.</p>
+    </div>
+    <div class="ps-card">
+      <span class="ps-n">Step 02</span>
+      <div class="ps-t">We Connect</div>
+      <p class="ps-d">We reach out on WhatsApp within 2 hours. No corporate calls. Direct.</p>
+    </div>
+    <div class="ps-card">
+      <span class="ps-n">Step 03</span>
+      <div class="ps-t">We Build</div>
+      <p class="ps-d">Your site gets designed and built with precision. You see it in days — not months.</p>
+    </div>
+    <div class="ps-card">
+      <span class="ps-n">Step 04</span>
+      <div class="ps-t">You Launch</div>
+      <p class="ps-d">Site goes live on your domain. You get files, hosting access, and ongoing support.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA SECTION -->
+<section class="form-section">
+  <div class="fl-top">
+    <div class="fl-eye">Project Intake</div>
+    <h2 class="fl-h2">START<br>PROJECT.</h2>
+    <p class="fl-p">Ready to build something premium and real? Let's get started right now. Click below to fill the intake form.</p>
+    <a href="start-project.html" class="submit-btn" onmouseenter="document.body.classList.add('hov')" onmouseleave="document.body.classList.remove('hov')">
+      <span>START PROJECT</span>
+      <span class="arr">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- FLOATING SOCIALS -->
+<div class="float-socials">
+  <a href="https://wa.me/917845131327" class="soc-btn" target="_blank" title="WhatsApp" onmouseenter="document.body.classList.add('hov')" onmouseleave="document.body.classList.remove('hov')">
+    <svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+  </a>
+  <a href="https://www.instagram.com/whitlock.ventures/" class="soc-btn" target="_blank" title="Instagram" onmouseenter="document.body.classList.add('hov')" onmouseleave="document.body.classList.remove('hov')">
+    <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-top">
+    <div class="foot-brand">WHITLOCK<br>WEBWORKS</div>
+    <a class="foot-email" href="mailto:whitlockventure@gmail.com">whitlockventure@gmail.com</a>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 Whitlock WebWorks — Under Whitlock Ventures</span>
+    <span>Chennai, India</span>
+    <span>Sai Srinivas, Founder</span>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const csr = document.getElementById('csr');
+const csrT = document.getElementById('csr-t');
+let mx = 0, my = 0, tx = 0, ty = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  csr.style.left = mx + 'px'; csr.style.top = my + 'px';
+});
+(function animCursor() {
+  tx += (mx - tx) * .1; ty += (my - ty) * .1;
+  csrT.style.left = tx + 'px'; csrT.style.top = ty + 'px';
+  requestAnimationFrame(animCursor);
+})();
+
+document.querySelectorAll('a, button, select, input, textarea, .soc-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+
+
+/* ── GSAP ANIMATIONS ── */
+gsap.registerPlugin(ScrollTrigger);
+
+// 1. STAGGERED REVEAL
+const revealTl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+revealTl
+  .from(".hero-h1 .block", {
+    y: 100,
+    opacity: 0,
+    duration: 0.9,
+    stagger: 0.15,
+  })
+  // Special emphasis for "BUILD" (index 1) - faster
+  .to(".hero-h1 .block.red", {
+    duration: 0.6,
+    scale: 1.05,
+    repeat: 1,
+    yoyo: true,
+  }, "-=0.8")
+  // Special emphasis for "REAL" (index 3) - more weight
+  .from(".hero-h1 .block:last-child", {
+    scale: 0.8,
+    duration: 1.2,
+  }, "-=0.6")
+  .to(".hero-desc", {
+    opacity: 1,
+    y: 0,
+    duration: 0.8
+  }, "-=0.5")
+  .to(".hero-cta", {
+    opacity: 1,
+    y: 0,
+    duration: 0.8
+  }, "-=0.6")
+  // 3. OUTLINE TO FILL REVEAL
+  .to(".hero-h1 .outline", {
+    "--fill-width": "100%",
+    duration: 1.2,
+    ease: "power2.inOut"
+  }, "1.2");
+
+// 2. PARALLAX MOTION
+gsap.to(".hero-h1 .block", {
+  y: (i) => [-20, -30, -15, -40][i],
+  scrollTrigger: {
+    trigger: ".hero",
+    start: "top top",
+    end: "bottom top",
+    scrub: true
+  }
+});
+
+gsap.to(".hero-bg-text", {
+  y: 100,
+  scrollTrigger: {
+    trigger: ".hero",
+    start: "top top",
+    end: "bottom top",
+    scrub: 1
+  }
+});
+
+// Scroll Reveal for other sections
+const srEls = document.querySelectorAll('.tilt-left, .tilt-right, .sb-head, .svc-row, .ps-card');
+srEls.forEach(el => {
+  gsap.from(el, {
+    opacity: 0,
+    y: 40,
+    duration: 1,
+    scrollTrigger: {
+      trigger: el,
+      start: "top 85%",
+      toggleActions: "play none none reverse"
+    }
+  });
+});
+
+</script>
+</body>
+</html>
